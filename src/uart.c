@@ -54,13 +54,12 @@ void UARTInit(uint32_t baudrate){
 	 *
 	 * set bit 9 for Rx enable
 	 * set bit 8 for Tx enable
-	 * set bit 7 for loopback enable
 	 * set bit 0 for UART enable*/
 
 	/* disable UART temporarily*/
 	UART0_CTL_R &= ~(1U<<0);
 
-	UART0_CTL_R |= ((1U<<9) | (1U<<8));// | (1U<<7));
+	UART0_CTL_R |= ((1U<<9) | (1U<<8));
 
 	UART0_IBRD_R = (uint32_t) SYSCLOCK_16MHz / (16 * baudrate);
 	//float temp = 0.425347;
@@ -76,6 +75,7 @@ void UARTInit(uint32_t baudrate){
 
 
 void UARTSendChar(char c){
+	while(UART0_FR_R & (1U<<5));
 	UART0_DR_R = c;
 }
 
@@ -89,5 +89,9 @@ uint8_t UARTRecvChar(void){
 
 void UARTSendString(char *s){
 
+	while(*s != '\0'){
+		UARTSendChar(*s);
+		s++;
+	}
 
 }

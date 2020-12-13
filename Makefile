@@ -33,7 +33,7 @@ all: $(TARGET).elf
 
 $(TARGET).elf: $(OBJS)
 	$(CC) $(LDFLAGS) $(CCFLAGS) $^ -o $(TARGET).elf
-	$(OBJDUMP) -d $(TARGET).elf > $(TARGET).s
+	$(OBJDUMP) -S -d $(TARGET).elf > $(TARGET).s
 
 .PHONY: clean
 clean:

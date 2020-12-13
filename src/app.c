@@ -9,8 +9,8 @@
 #include "bsp.h"
 #include "uart.h"
 
-uint16_t LED1_PERIOD_MS = 500;
-uint16_t LED2_PERIOD_MS = 100;
+volatile uint16_t LED1_PERIOD_MS = 1000;
+volatile uint16_t LED2_PERIOD_MS = 100;
 //uint8_t LED3_PERIOD_MS = 100;
 //uint8_t LED4_PERIOD_MS = 100;
 
@@ -50,16 +50,21 @@ void mainAppTask(void){
 	if(count1 == LED1_PERIOD_MS/2){
 		LED_TOGGLE_STATE(LED1_PORT,LED1_PIN);
 		count1=0;
-		UARTSendChar('A');
+		UARTSendString("\nTICK...\n\r");
 	}
 	if(count2 == LED2_PERIOD_MS/2){
 		LED_TOGGLE_STATE(LED2_PORT,LED2_PIN);
 		count2=0;
-		//char c = UARTRecvChar();
-		//UARTSendChar(c);
+
 	}
 
+	char c = UARTRecvChar();
+	UARTSendChar(c);
 
+	if( (c <= '9') & (c >= '0')){
+		LED1_PERIOD_MS = (uint16_t) 10*(1 + (uint16_t)c - '0');
+		UARTSendString("\nperiod updated \n\r");
+	}
 
 	count1++;
 	count2++;
