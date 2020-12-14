@@ -13,4 +13,5 @@ sources = src/main.c \
 	  src/bsp.c \
 	  src/systick.c \
 	  src/app.c \
-	  src/uart.c
+	  src/uart.c \
+	  src/pwm.c

@@ -41,10 +41,8 @@ void UARTInit(uint32_t baudrate){
 	GPIO_PORTA_AHB_DEN_R	|= ((1U<<1) | (1U<<0));
 	GPIO_PORTA_AHB_AFSEL_R	|= ((1U<<1) | (1U<<0));
 
-	/* Enable slew rate control for the gpio port pins
-	 * 
-	 * Set 4bit field in GPIOPCTL reg for tx, rx pins*/
-	GPIO_PORTA_AHB_DR2R_R	|= ((1U<<1) | (1U<<0));
+
+	/* Set 4bit field in GPIOPCTL reg for tx, rx pins */
 	GPIO_PORTA_AHB_PCTL_R	|= ((0x01<<4) | (0x01<<0));
 	
 
