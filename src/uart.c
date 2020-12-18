@@ -12,7 +12,7 @@
 #include "tm4c129encpdt.h"
 
 #include "uart.h"
-
+#include "mystring.h"
 
 /* ********************************************************************
  * The following function initializes the all the
@@ -93,3 +93,14 @@ void UARTSendString(char *s){
 	}
 
 }
+
+/* array used by PrintNumToString function*/
+char tempStr[12];
+
+void UARTPrintNumToString(uint32_t num){
+	
+	convertIntToString(num, tempStr);
+
+	UARTSendString(tempStr);
+}
+

@@ -16,7 +16,7 @@ TARGET = tm4c
 CC = arm-none-eabi-gcc
 OBJDUMP = arm-none-eabi-objdump
 
-CCFLAGS = -nostdlib -Wall -g -O0 -mcpu=cortex-m4 -mthumb $(verbose)
+CCFLAGS = -nostdlib -Wall -g -O0 -mfloat-abi=hard -mcpu=cortex-m4 -mthumb $(verbose)
 LDFLAGS = -Wl,-Map=$(TARGET).map -T project.ld
 
 

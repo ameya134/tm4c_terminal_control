@@ -14,5 +14,6 @@ void UARTInit(uint32_t baudrate);
 void UARTSendChar(char c);
 uint8_t UARTRecvChar(void);
 void UARTSendString(char *s);
+void UARTPrintNumToString(uint32_t num);
 
 #endif

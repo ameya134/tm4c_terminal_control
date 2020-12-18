@@ -14,4 +14,5 @@ sources = src/main.c \
 	  src/systick.c \
 	  src/app.c \
 	  src/uart.c \
-	  src/pwm.c
+	  src/pwm.c \
+	  src/mystring.c

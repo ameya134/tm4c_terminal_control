@@ -6,6 +6,9 @@
  * ______________________________________*/
 
 #include "main.h"
+#include "mystring.h"
+#include "app.h"
+
 #include "bsp.h"
 #include "uart.h"
 #include "pwm.h"
@@ -15,8 +18,14 @@ volatile uint16_t LED2_PERIOD_MS = 100;
 //uint8_t LED3_PERIOD_MS = 100;
 //uint8_t LED4_PERIOD_MS = 100;
 
+/* variables used to control pwm on led 4 */
 uint8_t pwmDuty = 50;
 uint8_t pwmDir = 1;
+
+/* character received from uart is stored here*/
+char recvVar;
+
+
 
 /* ******************************************************
  *
@@ -38,6 +47,7 @@ void appTaskInit(void){
 
 	UARTInit((uint32_t) 115200);
 }
+
 
 
 /* ******************************************************
@@ -64,25 +74,14 @@ void mainAppTask(void){
 
 	}*/
 
-	/* update pwm duty cycle */
-	if(pwmDir == 1){
-		pwmDuty++;
-	}else{
-		pwmDuty--;
-	}
-	if((pwmDuty == 100) || (pwmDuty == 0)){
-		pwmDir = ~pwmDir;
-	}
 
-	PWMLedDutyUpdate(pwmDuty);
+	PWMUpdateTask();
+
+	UARTEchoTask();
 
 
-	/* receive and echo the uart character */
-	char c = UARTRecvChar();
-	UARTSendChar(c);
-
-	if( (c <= '9') & (c >= '0')){
-		//LED1_PERIOD_MS = (uint16_t) 10*(1 + (uint16_t)c - '0');
+	if( (recvVar <= '9') & (recvVar >= '0')){
+		//LED1_PERIOD_MS = (uint16_t) 10*(1 + (uint16_t)recvVar - '0');
 		UARTSendString("\nperiod updated \n\r");
 	}
 
@@ -90,4 +89,30 @@ void mainAppTask(void){
 	count1++;
 	count2++;
 
+}
+
+
+void PWMUpdateTask(void){
+
+	/* update pwm duty cycle */
+	if(pwmDir == 1){
+		pwmDuty++;
+	}else{
+		pwmDuty--;
+	}
+	if((pwmDuty == 99) || (pwmDuty == 0)){
+		pwmDir = ~pwmDir;
+	}
+
+	PWMLedDutyUpdate(pwmDuty);
+	return;
+}
+
+void UARTEchoTask(void){
+
+	/* receive and echo the uart character */
+	recvVar = UARTRecvChar();
+	UARTSendChar(recvVar);
+
+	return;
 }

@@ -12,7 +12,7 @@
 #include "main.h"
 
 #include "pwm.h"
-
+#include "uart.h"
 
 /*
  * void PWMLedInit (period, duty)
@@ -45,7 +45,7 @@ void PWMLedInit(uint32_t period, uint8_t duty){
 	PWM0_0_GENA_R |= ((0x3<<6) | (0x2<<2));
 
 	uint32_t loadVal = (SYSCLOCK_16MHz / 1000000) * period;
-	uint32_t dutyVal = (duty/100) * loadVal;
+	uint32_t dutyVal = (duty * loadVal)/100;
 
 	PWM0_0_LOAD_R = loadVal;
 	PWM0_0_CMPA_R = dutyVal;
@@ -58,7 +58,11 @@ void PWMLedInit(uint32_t period, uint8_t duty){
 
 void PWMLedDutyUpdate(uint8_t duty){
 
-	PWM0_0_CMPA_R = (duty * PWM0_0_LOAD_R)/100;
+	uint32_t temp = (duty * PWM0_0_LOAD_R)/100;
+
+	UARTPrintNumToString(temp);
+	UARTSendString("\n\r");
+	PWM0_0_CMPA_R = temp;
 
 	return;
 }

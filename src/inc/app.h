@@ -12,6 +12,8 @@
 void appTaskInit(void);
 void mainAppTask(void);
 
+void PWMUpdateTask();
+void UARTEchoTask();
 
 
 #endif
