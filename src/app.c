@@ -1,9 +1,10 @@
-/* MAIN APPLICATION PROGRAM RESIDES HERE 
+/* ***************************************
+ * MAIN APPLICATION PROGRAM RESIDES HERE 
  *
  * Engineer: 	Ameya Phadke
  * Date:	4th Dec 2020
  *
- * ______________________________________*/
+ * ***************************************/
 
 #include "main.h"
 #include "mystring.h"
@@ -12,6 +13,7 @@
 #include "bsp.h"
 #include "uart.h"
 #include "pwm.h"
+#include "terminal.h"
 
 volatile uint16_t LED1_PERIOD_MS = 1000;
 volatile uint16_t LED2_PERIOD_MS = 100;
@@ -46,6 +48,10 @@ void appTaskInit(void){
 	PWMLedInit(1000U,50);
 
 	UARTInit((uint32_t) 115200);
+
+	terminalInit();
+
+	return;
 }
 
 
@@ -89,6 +95,7 @@ void mainAppTask(void){
 	count1++;
 	count2++;
 
+	return;
 }
 
 

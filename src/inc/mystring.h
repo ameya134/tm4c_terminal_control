@@ -12,6 +12,7 @@
 
 
 void convertIntToString(uint32_t num, char *retStr);
+uint32_t convertStringToInt(char *str);
 void reverseString(char * str, uint8_t len);
 
 

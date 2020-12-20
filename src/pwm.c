@@ -60,9 +60,14 @@ void PWMLedDutyUpdate(uint8_t duty){
 
 	uint32_t temp = (duty * PWM0_0_LOAD_R)/100;
 
-	UARTPrintNumToString(temp);
-	UARTSendString("\n\r");
 	PWM0_0_CMPA_R = temp;
 
 	return;
+}
+
+uint8_t PWMGetDuty(void){
+
+	uint8_t duty = (100*PWM0_0_CMPA_R)/PWM0_0_LOAD_R;
+
+	return (duty);
 }

@@ -34,6 +34,23 @@ void convertIntToString(uint32_t num, char *retStr){
 	return;
 }
 
+uint32_t convertStringToInt(char *str){
+
+	int i=0;
+	uint32_t num=0;
+
+	if((str[i] >= '0') | (str[i] <= '9')){
+		return 0;
+	}
+	
+	while(str[i] != '\0'){
+
+		num += str[i] - '0';
+		num *= 10;
+	}
+
+	return num;
+}
 
 void reverseString(char *str, uint8_t len){
 
@@ -46,3 +63,4 @@ void reverseString(char *str, uint8_t len){
 		str[len-1-i] = temp;
 	}
 }
+

@@ -39,5 +39,7 @@ void PWMLedInit(uint32_t period, uint8_t duty);
 void PWMLedDutyUpdate(uint8_t duty);
 
 
+uint8_t PWMGetDuty(void);
+
 
 #endif
