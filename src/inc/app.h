@@ -12,8 +12,9 @@
 void appTaskInit(void);
 void mainAppTask(void);
 
-void PWMUpdateTask();
-void UARTEchoTask();
+void LEDUpdateTask(void);
+void PWMUpdateTask(void);
+void UARTEchoTask(void);
 
 
 #endif

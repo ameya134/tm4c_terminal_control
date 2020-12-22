@@ -13,6 +13,6 @@
 #define _TERMINAL_H
 
 void terminalInit(void);
-
+void terminalUpdateTask(void);
 
 #endif

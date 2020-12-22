@@ -66,38 +66,40 @@ void appTaskInit(void){
  * ******************************************************/
 void mainAppTask(void){
 
-	static uint16_t count1=0,count2=0;
 
-	/* toggle the leds when period is matched*/
-	if(count1 == LED1_PERIOD_MS/2){
-		LED_TOGGLE_STATE(LED1_PORT,LED1_PIN);
-		count1=0;
-		UARTSendString("\nTICK...\n\r");
-	}
-	/*if(count2 == LED2_PERIOD_MS/2){
-		LED_TOGGLE_STATE(LED2_PORT,LED2_PIN);
-		count2=0;
-
-	}*/
-
+	LEDUpdateTask();
 
 	PWMUpdateTask();
 
-	UARTEchoTask();
+	terminalUpdateTask();
 
-
-	if( (recvVar <= '9') & (recvVar >= '0')){
-		//LED1_PERIOD_MS = (uint16_t) 10*(1 + (uint16_t)recvVar - '0');
-		UARTSendString("\nperiod updated \n\r");
-	}
-
-	/* update the count variables */
-	count1++;
-	count2++;
 
 	return;
 }
 
+
+void LEDUpdateTask(void){
+
+	static uint16_t countLED1=0,countLED2=0;
+
+	/* toggle the leds when period is matched*/
+	if(countLED1 == LED1_PERIOD_MS/2){
+		LED_TOGGLE_STATE(LED1_PORT,LED1_PIN);
+		countLED1=0;
+		//UARTSendString("\nTICK...\n\r");
+	}
+	/*if(countLED2 == LED2_PERIOD_MS/2){
+		LED_TOGGLE_STATE(LED2_PORT,LED2_PIN);
+		countLED2=0;
+
+	}*/
+
+	/* update the count variables */
+	countLED1++;
+	countLED2++;
+	
+	return;
+}
 
 void PWMUpdateTask(void){
 
@@ -115,11 +117,3 @@ void PWMUpdateTask(void){
 	return;
 }
 
-void UARTEchoTask(void){
-
-	/* receive and echo the uart character */
-	recvVar = UARTRecvChar();
-	UARTSendChar(recvVar);
-
-	return;
-}
