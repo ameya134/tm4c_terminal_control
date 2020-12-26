@@ -16,7 +16,7 @@
 
 /* Declaration for private functions */
 void terminalEcho(void);
-
+void inputBufferUpdate(void);
 
 uint8_t dutyVal;
 char dutyStr[5];
@@ -28,6 +28,10 @@ char dutyStr[5];
 char terminalIpCmdBuf[CMD_BUF_LEN];
 char terminalRecvChar;
 uint8_t bufLen = 0;
+
+char *commandsList[] = { "cmd1",
+			"cmd2",
+			"cmd3"};
 
 void terminalInit(void){
 
@@ -51,22 +55,8 @@ void terminalUpdateTask(void){
 	terminalRecvChar = UARTRecvChar();
 	
 	terminalEcho();
-	if((terminalRecvChar == '\r') | (bufLen == CMD_BUF_LEN -3))
-	{
-		terminalIpCmdBuf[bufLen] = '\n';
-		terminalIpCmdBuf[bufLen+1] = '\r';
-		terminalIpCmdBuf[bufLen+2] = '\0';
-
-		UARTSendString("\n\r");
-		UARTSendString(terminalIpCmdBuf);
-		UARTSendString("terminal@TM4C: >");
-		bufLen = 0;
-	}
-	else if(terminalRecvChar >= 0x20){
-		terminalIpCmdBuf[bufLen] = (char )terminalRecvChar;
-		bufLen ++;
-	}
-
+	
+	inputBufferUpdate();
 	
 	return;
 }
@@ -74,5 +64,33 @@ void terminalUpdateTask(void){
 void terminalEcho(void){
 
 	UARTSendChar(terminalRecvChar);
+	return;
+}
+
+void inputBufferUpdate(void){
+
+	if((bufLen > 0) && (terminalRecvChar == '\b')){
+		bufLen--;
+		UARTSendString(" \b");
+	}
+	else if((terminalRecvChar == '\r') | (bufLen == CMD_BUF_LEN -3))
+	{
+		//terminalIpCmdBuf[bufLen] = '\n';
+		//terminalIpCmdBuf[bufLen+1] = '\r';
+		terminalIpCmdBuf[bufLen] = '\0';
+
+		if(strCmp(terminalIpCmdBuf,"cmd1") == 0){
+			UARTSendString("\n\r");
+			UARTSendString("command 1 recived");
+			UARTSendString("\n\r");
+			UARTSendString("terminal@TM4C: >");
+		}
+		bufLen = 0;
+	}
+	else if(terminalRecvChar >= 0x20){
+		terminalIpCmdBuf[bufLen] = (char )terminalRecvChar;
+		bufLen ++;
+	}
+
 	return;
 }
