@@ -39,11 +39,11 @@ char recvVar;
 void appTaskInit(void){
 
 	INIT_LED_1();
-	//INIT_LED_2();
+	INIT_LED_2();
 
 
 	LED_TURN_ON(LED1_PORT,LED1_PIN);
-	//LED_TURN_ON(LED2_PORT,LED2_PIN);
+	LED_TURN_ON(LED2_PORT,LED2_PIN);
 
 	PWMLedInit(1000U,50);
 

@@ -15,6 +15,6 @@ void convertIntToString(uint32_t num, char *retStr);
 void reverseString(char * str, uint8_t len);
 
 uint32_t convertStringToInt(char *str);
-uint32_t strCmp(char *str1, char *str2);
+int32_t strCmp(char *str1, char *str2);
 
 #endif

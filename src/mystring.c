@@ -64,18 +64,16 @@ void reverseString(char *str, uint8_t len){
 	}
 }
 
-uint32_t strCmp(char *str1, char *str2){
+int32_t strCmp(char *str1, char *str2){
 
 	int i=0;
 	while((str1[i] - str2[i]) == 0){
+		if( (str1[i] == '\0') && (str2[i] == '\0')){
+			return 0;
+		}
 		i++;
 	}
 
-	if( (str1[i-1] == '\n') && (str2[i-1] == '\n')){
-		return 0;
-	}
-	else{
-		return i;
-	}
+		return -1;
 
 }
