@@ -58,8 +58,14 @@ void PWMLedInit(uint32_t period, uint8_t duty){
 
 void PWMLedDutyUpdate(uint8_t duty){
 
-	uint32_t temp = (duty * PWM0_0_LOAD_R)/100;
+	uint32_t temp;
 
+	if(duty >= 100){
+		temp = PWM0_0_LOAD_R - 1;
+	}
+	else{
+		temp = (duty * PWM0_0_LOAD_R)/100;
+	}
 	PWM0_0_CMPA_R = temp;
 
 	return;

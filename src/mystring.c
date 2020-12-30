@@ -39,14 +39,15 @@ uint32_t convertStringToInt(char *str){
 	int i=0;
 	uint32_t num=0;
 
-	if((str[i] >= '0') | (str[i] <= '9')){
+	if((str[i] < '0') | (str[i] > '9')){
 		return 0;
 	}
 	
 	while(str[i] != '\0'){
 
-		num += str[i] - '0';
 		num *= 10;
+		num += str[i] - '0';
+		i++;
 	}
 
 	return num;
@@ -64,11 +65,14 @@ void reverseString(char *str, uint8_t len){
 	}
 }
 
-int32_t strCmp(char *str1, char *str2){
+int32_t strCmp(char *str1, char *str2,int len){
 
 	int i=0;
 	while((str1[i] - str2[i]) == 0){
-		if( (str1[i] == '\0') && (str2[i] == '\0')){
+		/* return either if end of string is reached or 
+		 * strings match upto specified length
+		 * len is passed as -ve value for ignoring the len val*/
+		if( ((str1[i] == '\0') && (str2[i] == '\0')) || (i == len)){
 			return 0;
 		}
 		i++;

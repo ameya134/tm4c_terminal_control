@@ -69,7 +69,7 @@ void mainAppTask(void){
 
 	LEDUpdateTask();
 
-	PWMUpdateTask();
+	//PWMUpdateTask();
 
 	terminalUpdateTask();
 
