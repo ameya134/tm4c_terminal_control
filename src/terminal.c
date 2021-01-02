@@ -15,10 +15,6 @@
 #include "uart.h"
 #include "pwm.h"
 
-/* Declaration for private functions */
-void terminalEcho(void);
-void inputBufferUpdate(void);
-int terminalCommandParse(void);
 
 uint8_t dutyVal;
 char dutyStr[5];
@@ -32,79 +28,59 @@ char terminalRecvChar;
 uint8_t bufLen = 0;
 
 #define cmdLen 3
-char *commandsList[] = { "led2",
+char *commandsList[] = {"led2",
 			"cmd3",
 			"pwm"};
 
-void terminalInit(void){
+/* This stores pointers to all strings that are to be printed
+ * on the terminal by the backgroun task. */
+#define ioBufCapacity 100
 
-	UARTSendString("\n\rConnected to TM4C terminal....\n\r");
-
-	UARTSendString("LED 4 PWM DUTY: ");
-
-	dutyVal = PWMGetDuty();
-
-	convertIntToString(dutyVal,dutyStr);
-
-	UARTSendString(dutyStr);
-	UARTSendString("\n\r");
-	UARTSendString(commandsList[0]);
-	UARTSendString("\n\r");
-	UARTSendString("terminal@TM4C: >");
+struct FIFO{
+	uint8_t firstLoc;
+	uint8_t lastLoc;
+	uint8_t bufLen;
 	
-	return;
+	char *buffer[ioBufCapacity];
+} terminalOutputBuffer,terminalInputBuffer;
+
+
+void terminalIOBufInit(void){
+
+	terminalOutputBuffer.firstLoc = 0;
+	terminalOutputBuffer.lastLoc = 0;
+	terminalOutputBuffer.bufLen = 0;
+
 }
+/* Implementation of private private functions */
 
-void terminalUpdateTask(void){
+int terminalSendString(char * s){
 
-	terminalRecvChar = UARTRecvChar();
-	
-	terminalEcho();
-	
-	inputBufferUpdate();
+	if(terminalOutputBuffer.bufLen < ioBufCapacity){
+		terminalOutputBuffer.buffer[terminalOutputBuffer.lastLoc] = s;
 
-	if(terminalRecvChar == '\r'){
-		switch(terminalCommandParse()){
-			
-			case 0:	if(strCmp(&terminalIpCmdBuf[5],"on",-1) == 0){
-					LED_TURN_ON(LED2_PORT,LED2_PIN);
-					UARTSendString("\n\rLED 2 turned ON");
-				}
-				else if(strCmp(&terminalIpCmdBuf[5],"off",-1) == 0){
-					LED_TURN_OFF(LED2_PORT,LED2_PIN);
-					UARTSendString("\n\rLED 2 turned OFF");
-				}
-				else{
-					UARTSendString("\n\rINVALID ARGUMENT");
-				}
-				break;
-	
-			case 1: UARTSendString("\n\rcmd3 received\n\r");
-				break;
-
-			case 2: PWMLedDutyUpdate(
-					(uint8_t)convertStringToInt(&terminalIpCmdBuf[4])
-					);
-				UARTSendString("\n\rPWM duty Updated: ");
-				char dutyStr[2];
-				convertIntToString(PWMGetDuty(),dutyStr);
-				UARTSendString(dutyStr);
-				UARTSendString("%\n\r");
-				break;
+		/* temporarily disable interrupts while updating counts*/
+		//__asm("disable_irq");
+		terminalOutputBuffer.lastLoc++;
+		if(terminalOutputBuffer.lastLoc == ioBufCapacity){
+			terminalOutputBuffer.lastLoc = 0;
 		}
+		terminalOutputBuffer.bufLen++;
+		//__asm("enable_irq");
 
-		UARTSendString("\n\r");
-		UARTSendString("terminal@TM4C: >");
+		return 0;
 	}
-
-	return;
+	else{
+		/* terminal buffer full */
+		return 1;
+	}
 }
 
 void terminalEcho(void){
 
 	if(terminalRecvChar == '\b')
 		return;
-	UARTSendChar(terminalRecvChar);
+	terminalSendString(&terminalRecvChar);
 	return;
 }
 
@@ -118,7 +94,7 @@ void inputBufferUpdate(void){
 	else if((bufLen > 0) && (terminalRecvChar == '\b')){
 		
 		bufLen--;
-		UARTSendString("\b \b");
+		terminalSendString("\b \b");
 	}
 	else if(terminalRecvChar == ' '){
 		
@@ -146,3 +122,94 @@ int terminalCommandParse(void){
 
 	return -1;
 }
+
+void terminalBackgroundTask(void){
+
+	while(terminalOutputBuffer.bufLen != 0){
+
+		UARTSendString(terminalOutputBuffer.buffer[
+				terminalOutputBuffer.firstLoc]);
+
+		/* temporarily disable interrupts while updating counts */
+		//__asm("disable_irq");
+		terminalOutputBuffer.firstLoc ++;
+		if(terminalOutputBuffer.firstLoc == ioBufCapacity){
+			terminalOutputBuffer.firstLoc = 0;
+		}
+		terminalOutputBuffer.bufLen--;
+		//__asm("enable_irq");
+	}
+
+
+	return;
+}
+
+
+/* Implementation of public functions */
+
+void terminalInit(void){
+
+	terminalIOBufInit();
+
+	terminalSendString("\n\rConnected to TM4C terminal....\n\r");
+
+	terminalSendString("LED 4 PWM DUTY: ");
+
+	dutyVal = PWMGetDuty();
+
+	convertIntToString(dutyVal,dutyStr);
+
+	terminalSendString(dutyStr);
+	terminalSendString("\n\r");
+	terminalSendString(commandsList[0]);
+	terminalSendString("\n\r");
+	terminalSendString("terminal@TM4C: >");
+	
+	return;
+}
+
+void terminalUpdateTask(void){
+
+	terminalRecvChar = UARTRecvChar();
+	
+	terminalEcho();
+	
+	inputBufferUpdate();
+
+	if(terminalRecvChar == '\r'){
+		switch(terminalCommandParse()){
+			
+			case 0:	if(strCmp(&terminalIpCmdBuf[5],"on",-1) == 0){
+					LED_TURN_ON(LED2_PORT,LED2_PIN);
+					terminalSendString("\n\rLED 2 turned ON");
+				}
+				else if(strCmp(&terminalIpCmdBuf[5],"off",-1) == 0){
+					LED_TURN_OFF(LED2_PORT,LED2_PIN);
+					terminalSendString("\n\rLED 2 turned OFF");
+				}
+				else{
+					terminalSendString("\n\rINVALID ARGUMENT");
+				}
+				break;
+	
+			case 1: terminalSendString("\n\rcmd3 received\n\r");
+				break;
+
+			case 2: PWMLedDutyUpdate(
+					(uint8_t)convertStringToInt(&terminalIpCmdBuf[4])
+					);
+				terminalSendString("\n\rPWM duty Updated: ");
+				char dutyStr[2];
+				convertIntToString(PWMGetDuty(),dutyStr);
+				terminalSendString(dutyStr);
+				terminalSendString("%\n\r");
+				break;
+		}
+
+		terminalSendString("\n\r");
+		terminalSendString("terminal@TM4C: >");
+	}
+
+	return;
+}
+

@@ -5,17 +5,7 @@
 #include "systick.h"
 
 #include "app.h"
-
-
-void delayloop(uint8_t delay){
-
-	uint16_t i;
-
-	for(;delay>0;delay--){
-		for(i=0;i<1000;i++);
-	}
-
-}
+#include "terminal.h"
 
 
 int main(void){
@@ -29,6 +19,7 @@ int main(void){
 	while(1){
 		// wait for interrupt in low power sleep mode
 		__asm("wfi");
+		terminalBackgroundTask();
 	}
 
 

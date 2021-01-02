@@ -14,5 +14,5 @@
 
 void terminalInit(void);
 void terminalUpdateTask(void);
-
+void terminalBackgroundTask(void);
 #endif
