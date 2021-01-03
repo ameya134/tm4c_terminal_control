@@ -42,7 +42,7 @@ struct FIFO{
 	uint8_t bufLen;
 	
 	char *buffer[ioBufCapacity];
-} terminalOutputBuffer,terminalInputBuffer;
+} terminalOutputBuffer;
 
 
 void terminalIOBufInit(void){
@@ -74,6 +74,11 @@ int terminalSendString(char * s){
 		/* terminal buffer full */
 		return 1;
 	}
+}
+
+char terminalGetChar(void){
+
+	return UARTRecvChar();
 }
 
 void terminalEcho(void){
@@ -170,7 +175,7 @@ void terminalInit(void){
 
 void terminalUpdateTask(void){
 
-	terminalRecvChar = UARTRecvChar();
+	terminalRecvChar = terminalGetChar();
 	
 	terminalEcho();
 	
