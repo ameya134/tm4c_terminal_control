@@ -13,6 +13,10 @@
 #define _TERMINAL_H
 
 void terminalInit(void);
+
 void terminalUpdateTask(void);
 void terminalBackgroundTask(void);
+
+int terminalSendString(char * s);
+
 #endif

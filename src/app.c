@@ -15,14 +15,14 @@
 #include "pwm.h"
 #include "terminal.h"
 
-volatile uint16_t LED1_PERIOD_MS = 1000;
-volatile uint16_t LED2_PERIOD_MS = 100;
-//uint8_t LED3_PERIOD_MS = 100;
-//uint8_t LED4_PERIOD_MS = 100;
 
-/* variables used to control pwm on led 4 */
-uint8_t pwmDuty = 50;
-uint8_t pwmDir = 1;
+/* variable used to control pwm fading on led 4 */
+volatile int pwm_fade = 0;
+
+/* variables to control blinking */
+volatile uint16_t LED1_PERIOD_MS = 200;
+volatile int blink_on = 0;
+volatile uint16_t countLED1=0;
 
 /* character received from uart is stored here*/
 char recvVar;
@@ -69,7 +69,7 @@ void mainAppTask(void){
 
 	LEDUpdateTask();
 
-	//PWMUpdateTask();
+	PWMUpdateTask();
 
 	terminalUpdateTask();
 
@@ -80,29 +80,32 @@ void mainAppTask(void){
 
 void LEDUpdateTask(void){
 
-	static uint16_t countLED1=0,countLED2=0;
-
+	if(blink_on == 0){
+		return;
+	}
 	/* toggle the leds when period is matched*/
-	if(countLED1 == LED1_PERIOD_MS/2){
+	if((countLED1 == LED1_PERIOD_MS/2)){
 		LED_TOGGLE_STATE(LED1_PORT,LED1_PIN);
 		countLED1=0;
-		//UARTSendString("\nTICK...\n\r");
 	}
-	/*if(countLED2 == LED2_PERIOD_MS/2){
-		LED_TOGGLE_STATE(LED2_PORT,LED2_PIN);
-		countLED2=0;
 
-	}*/
-
-	/* update the count variables */
+	/* update the count variable */
 	countLED1++;
-	countLED2++;
 	
 	return;
 }
 
 void PWMUpdateTask(void){
 
+	static int8_t pwmDuty = 50;
+	static uint8_t pwmDir = 1;
+
+	/* function returns if fade is disabled.
+	 * fade can be enabled using the terminal command. */
+	if (pwm_fade == 0){
+		return;
+	}
+		
 	/* update pwm duty cycle */
 	if(pwmDir == 1){
 		pwmDuty++;
@@ -114,6 +117,7 @@ void PWMUpdateTask(void){
 	}
 
 	PWMLedDutyUpdate(pwmDuty);
+	
 	return;
 }
 

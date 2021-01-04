@@ -16,4 +16,5 @@ sources = src/main.c \
 	  src/uart.c \
 	  src/pwm.c \
 	  src/mystring.c \
-	  src/terminal.c
+	  src/terminal.c \
+	  src/commands.c

@@ -59,7 +59,7 @@ void PWMLedInit(uint32_t period, uint8_t duty){
 void PWMLedDutyUpdate(uint8_t duty){
 
 	uint32_t temp;
-
+	
 	if(duty >= 100){
 		temp = PWM0_0_LOAD_R - 1;
 	}

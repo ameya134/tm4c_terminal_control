@@ -3,17 +3,19 @@
  * which runs uses UART for connection
  *
  * Engineer:	Ameya Phadke
- * Date: 	19th Dec 2020
+ * Date:		19th Dec 2020
  *
  * ***************************************************/
 
 #include "main.h"
 #include "mystring.h"
 
-#include "terminal.h"
 #include "bsp.h"
 #include "uart.h"
 #include "pwm.h"
+
+#include "terminal.h"
+#include "commands.h"
 
 
 uint8_t dutyVal;
@@ -27,10 +29,7 @@ char terminalIpCmdBuf[CMD_BUF_LEN];
 char terminalRecvChar;
 uint8_t bufLen = 0;
 
-#define cmdLen 3
-char *commandsList[] = {"led2",
-			"cmd3",
-			"pwm"};
+extern char *commandsList[];
 
 /* This stores pointers to all strings that are to be printed
  * on the terminal by the backgroun task. */
@@ -184,37 +183,26 @@ void terminalUpdateTask(void){
 	if(terminalRecvChar == '\r'){
 		switch(terminalCommandParse()){
 			
-			case 0:	if(strCmp(&terminalIpCmdBuf[5],"on",-1) == 0){
-					LED_TURN_ON(LED2_PORT,LED2_PIN);
-					terminalSendString("\n\rLED 2 turned ON");
-				}
-				else if(strCmp(&terminalIpCmdBuf[5],"off",-1) == 0){
-					LED_TURN_OFF(LED2_PORT,LED2_PIN);
-					terminalSendString("\n\rLED 2 turned OFF");
-				}
-				else{
-					terminalSendString("\n\rINVALID ARGUMENT");
-				}
-				break;
+			case 0:	led2Command(&terminalIpCmdBuf[5]);
+					break;
 	
-			case 1: terminalSendString("\n\rcmd3 received\n\r");
-				break;
+			case 1: blinkCommand(&terminalIpCmdBuf[6]);
+					break;
 
-			case 2: PWMLedDutyUpdate(
-					(uint8_t)convertStringToInt(&terminalIpCmdBuf[4])
-					);
-				terminalSendString("\n\rPWM duty Updated: ");
-				char dutyStr[2];
-				convertIntToString(PWMGetDuty(),dutyStr);
-				terminalSendString(dutyStr);
-				terminalSendString("%\n\r");
-				break;
+			case 2: pwmCommand(&terminalIpCmdBuf[4]);
+					break;
 		}
 
 		terminalSendString("\n\r");
 		terminalSendString("terminal@TM4C: >");
-	}
+		
+		/* clear input buffer*/
+		
+		int i;
+		for(i=0;i<CMD_BUF_LEN;i++){
+			terminalIpCmdBuf[i] = 0;
+		}
 
 	return;
+	}
 }
-
