@@ -8,4 +8,6 @@
 
 
 
-includes = -I src/inc/
+includes = -I src/inc/ \
+	   -I src/inc/hal \
+	   -I src/inc/core

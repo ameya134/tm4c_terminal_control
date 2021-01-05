@@ -6,7 +6,9 @@
 
 static uint8_t ledBits=0x00; // bitwise variable
 
-/*connected to port N pin 1*/
+
+/* Initialises the led connected to
+ * port N pin 1 as gpio output */
 void INIT_LED_1(void)
 {
 	/* start clock to port N(12th port)*/
@@ -21,7 +23,9 @@ void INIT_LED_1(void)
 	ledBits &= ~(1U<<LED1_PIN);
 }
 
-/*connected to port N pin 0*/
+
+/* Initialises the led connected to
+ * port N pin 0 as gpio output */
 void INIT_LED_2(void)
 {
 	/* start clock to port N(12th port)*/
@@ -36,7 +40,9 @@ void INIT_LED_2(void)
 	ledBits &= ~(1U<<LED2_PIN);
 }
 
-/*connected to port F pin 4*/
+
+/* Initialises the led connected to
+ * port F pin 4 as gpio output */
 void INIT_LED_3(void)
 {
 	/* start clock to port F(5th port)*/
@@ -51,7 +57,9 @@ void INIT_LED_3(void)
 	ledBits &= ~(1U<<LED3_PIN);
 }
 
-/*connected to port F pin 0*/
+
+/* Initialises the led connected to
+ * port F pin 4 as gpio output */
 void INIT_LED_4(void)
 {
 	/* start clock to port F(5th port)*/
@@ -67,7 +75,19 @@ void INIT_LED_4(void)
 }
 
 
-/* Turn on led connected to port portBase and pin pinNo*/
+
+/* ************************************************************
+ * This function turns the led on
+ *
+ * param: portBase	the port letter of the led
+ * param: pinNo		the pin no of led pin
+ *
+ * return: void
+ * 
+ * brief: Function turns on led connected to port portBase and
+ * pin pinNo 
+ *
+ * ************************************************************/
 void LED_TURN_ON(uint8_t portBase, uint8_t pinNO)
 {
 	if(portBase == GPIO_PORT_N)
@@ -78,7 +98,19 @@ void LED_TURN_ON(uint8_t portBase, uint8_t pinNO)
 	ledBits |= (1U<<LED1_PIN);
 }
 
-/* Turn off led connected to port portBase and pin pinNo*/
+
+/* ************************************************************
+ * This function turns the led off
+ *
+ * param: portBase	the port letter of the led
+ * param: pinNo		the pin no of led pin
+ *
+ * return: void
+ * 
+ * brief: Function turns off led connected to port portBase and
+ * pin pinNo 
+ *
+ * ************************************************************/
 void LED_TURN_OFF(uint8_t portBase, uint8_t pinNO)
 {
 	if(portBase == GPIO_PORT_N)
@@ -89,7 +121,19 @@ void LED_TURN_OFF(uint8_t portBase, uint8_t pinNO)
 	ledBits &= ~(1U<<LED1_PIN);
 }
 
-/* toggle led connected to port portBase and pin pinNo*/
+
+/* ************************************************************
+ * This function toggles the led
+ *
+ * param: portBase	the port letter of the led
+ * param: pinNo		the pin no of led pin
+ *
+ * return: void
+ * 
+ * brief: Function toggles the led connected to port portBase and
+ * pin pinNo 
+ *
+ * ************************************************************/
 void LED_TOGGLE_STATE(uint8_t portBase, uint8_t pinNO)
 {	
 	if(portBase == GPIO_PORT_N)
@@ -99,3 +143,5 @@ void LED_TOGGLE_STATE(uint8_t portBase, uint8_t pinNO)
 
 	ledBits ^= (1U<<LED1_PIN);
 }
+
+

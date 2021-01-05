@@ -10,11 +10,12 @@
 
 sources = src/main.c \
 	  src/startup_gcc.c \
-	  src/bsp.c \
-	  src/systick.c \
 	  src/app.c \
-	  src/uart.c \
-	  src/pwm.c \
 	  src/mystring.c \
 	  src/terminal.c \
-	  src/commands.c
+	  src/commands.c \
+	  src/hal/bsp.c \
+	  src/hal/systick.c \
+	  src/hal/uart.c \
+	  src/hal/pwm.c 
+
