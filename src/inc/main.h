@@ -7,8 +7,13 @@
 #include "stdint.h"
 
 
-#define SYSCLOCK_16MHz 16000000
+/* PROJECT RELATED MACROS ARE DECLARED HERE */
 
+
+/* system clock frequency */
+#define SYSCLOCK_Hz 16000000
+
+/* system tick period in miliseconds */
 #define SYSTICK_PERIOD_ms 10
 
 

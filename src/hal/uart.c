@@ -1,4 +1,4 @@
-/* ********************************************************************
+/* ***************************************************************************
  * This file contains the implementation of functions to send
  * data using the UART 0. compatible with TI's tivaware microcontroller
  * header file
@@ -6,7 +6,7 @@
  * Engineer: 	Ameya Phadke
  * Date:	4th Dec 2020
  *
- * ********************************************************************/
+ * ***************************************************************************/
 
 #include "main.h"
 #include "tm4c129encpdt.h"
@@ -14,9 +14,17 @@
 #include "uart.h"
 #include "mystring.h"
 
-/* ********************************************************************
- * The following function initializes the all the
- * necessary gpio and UART module settings to use UART
+
+
+/* ***************************************************************************
+ * This function initializes the UART module
+ *
+ * param: baudrate	rate in bits/sec at which uart will send and receive data
+ *
+ * return: void
+ * 
+ * brief: The following function initializes the all the necessary gpio and 
+ * UART module settings to use UART
  *
  * baud rate is calculated using following formula
  *
@@ -25,8 +33,7 @@
  * where BRDI is the 16 bit integer part and BRDF is the
  * 6 bit fractional part
  *
- * *******************************************************************/
-
+ * **************************************************************************/
 void UARTInit(uint32_t baudrate){
 
 	/* Enable the power to UART Module and appropriate GPIO port*/
@@ -59,7 +66,7 @@ void UARTInit(uint32_t baudrate){
 
 	UART0_CTL_R |= ((1U<<9) | (1U<<8));
 
-	UART0_IBRD_R = (uint32_t) SYSCLOCK_16MHz / (16 * baudrate);
+	UART0_IBRD_R = (uint32_t) SYSCLOCK_Hz / (16 * baudrate);
 	//float temp = 0.425347;
 	UART0_FBRD_R = (uint32_t) 44;//((temp *64) + 0.5);
 
@@ -69,22 +76,69 @@ void UARTInit(uint32_t baudrate){
 
 	/* enable UART */
 	UART0_CTL_R |= (1U<<0);
+	
+	return;
 }
 
 
-void UARTSendChar(char c){
-	while(UART0_FR_R & (1U<<5));
-	UART0_DR_R = c;
-}
-
+/* ***************************************************************************
+ * This function receives a byte of data through UART module
+ *
+ * param: void
+ *
+ * return: uint8_t return a byte of data received from uart module
+ * 
+ * brief: The function return a byte of data received by the UART module on
+ * the Rx pin of the microcontroller. A value of 0x00 is returned if no new
+ * data is available.
+ *
+ * **************************************************************************/
 uint8_t UARTRecvChar(void){
 
+	/* check if new data is available */
 	if((UART0_FR_R & (1U<<6))){
 		return ((uint8_t) UART0_DR_R);
 	}
+	
 	return 0;
 }
 
+
+
+/* ******************************************************************************
+ * This function sends a byte of data through UART module
+ *
+ * param: c	the byte of data that needs to be sent
+ *
+ * return: void
+ * 
+ * brief: The functions sends a byte of data through uart module when an ongoing
+ * transmission if any is completed.
+ *
+ * *****************************************************************************/
+void UARTSendChar(char c){
+
+	/* check the busy flag */
+	while(UART0_FR_R & (1U<<5));
+	
+	UART0_DR_R = c;
+	return;
+}
+
+
+/* *********************************************************************************
+ * This function sends a string of data through UART module
+ *
+ * param: s	pointer to the string/ char array of the data that is to be sent.
+ *
+ * return: void
+ * 
+ * brief: The function send the string, pointed by the pointer argument through the
+ * UART module. The function keeps sending the next byte until null terminating char
+ * is reached. It is expected that the string to be sent is terminated
+ * with '\0' by the caller.
+ *
+ * ********************************************************************************/
 void UARTSendString(char *s){
 
 	while(*s != '\0'){
@@ -92,9 +146,22 @@ void UARTSendString(char *s){
 		s++;
 	}
 
+	return;
 }
 
-/* array used by PrintNumToString function*/
+
+/* **********************************************************************************
+ * This function sends a BASE 10 character representation of an integer through UART.
+ *
+ * param: num	The number that is to be sent through UART.
+ *
+ * return: void
+ * 
+ * brief: This function sends the BASE 10 character representation of an integer.
+ * This function relies on a function which is used to convert integer into string.
+ *
+ * *********************************************************************************/
+#ifdef _MYSTRING_H
 char tempStr[12];
 
 void UARTPrintNumToString(uint32_t num){
@@ -102,5 +169,9 @@ void UARTPrintNumToString(uint32_t num){
 	convertIntToString(num, tempStr);
 
 	UARTSendString(tempStr);
+	
+	return;
 }
+#endif
+
 

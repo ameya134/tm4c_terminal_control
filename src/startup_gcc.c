@@ -38,8 +38,8 @@
 //*****************************************************************************
 
 #include <stdint.h>
-#include "inc/hw_nvic.h"
-#include "inc/hw_types.h"
+#include "inc/core/hw_nvic.h"
+#include "inc/core/hw_types.h"
 
 //*****************************************************************************
 //
