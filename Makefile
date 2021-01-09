@@ -1,9 +1,12 @@
+# ######################################################
+# 
 # This is the makefile for TM4C129ENCDT test project
 #
-# Engineer: 	Ameya Phadke
-# Date:		28th Nov 2020
+# Author:		Ameya Phadke
+# Date created:		28th Nov 2020
+# Date modified:	9th Jan 2021
 #
-# __________________________________________________
+# ######################################################
 
 include sources.mk
 include includes.mk
