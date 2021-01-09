@@ -1,3 +1,15 @@
+/* ***********************************************************************
+ * This is the main file for tm4c terminal demo application
+ *
+ * main calls the initialization functions and then waits in the 
+ * superloop executing backround tasks or in a low power mode waiting
+ * for interrupts.
+ *
+ * Author:		Ameya Phadke
+ * Date Created:	1st Dec 2020
+ * Last modified:	8th Jan 2021
+ * 
+ * **********************************************************************/
 
 #include <main.h>
 
@@ -34,3 +46,5 @@ int main(void){
 	
 	return 0;
 }
+
+

@@ -3,8 +3,9 @@
  * configuration and use of pwm module which is present on
  * tm4c129encpdt 
  *
- * Engineer: 	Ameya Phadke
- * Date:	13th Dec 2020
+ * Author:		Ameya Phadke
+ * Date created:	13th Dec 2020
+ * Last modified:	8th Jan 2021
  *
  * ********************************************************/
 
@@ -38,7 +39,7 @@ void PWMLedInit(uint32_t period, uint8_t duty);
  *
  * return: void
  * 
- * brief: Updates teh compare register t update the duty cycle of the
+ * brief: Updates the compare register t update the duty cycle of the
  * pwm signal.
  * 
  * ********************************************************************/

@@ -4,8 +4,9 @@
  * header file
  * 
  *
- * Engineer:	Ameya Phadke
- * Date:	4th Dec 2020
+ * Author:		Ameya Phadke
+ * Date created:	4th Dec 2020
+ * Last modified:	8th Jan 2021
  *
  * *******************************************************************/
 
@@ -13,7 +14,7 @@
 #define _SYSTICK_H
 
 
-/* ****************************************************************
+/* ********************************************************************
  * This function initializes the SysTick Timer
  *
  * param: period_ms	time period in ms between every timer interrupt
@@ -29,7 +30,7 @@
  *
  * Reload_val = (system_frequency/1000) * period_ms 
  *
- * ****************************************************************/
+ * ********************************************************************/
 void SysTickIntEnable(uint16_t period_ms);
 
 

@@ -1,8 +1,9 @@
 /* ********************************************************
  * This is the header file for UART functions declarations
  *
- * Engineer: Ameya Phadke
- * Date:	4th Dec 2020
+ * Author:		Ameya Phadke
+ * Date created:	4th Dec 2020
+ * Last modified:	8th Jan 2021
  *
  * ********************************************************/
 
@@ -13,7 +14,7 @@
 /* ***************************************************************************
  * This function initializes the UART module
  *
- * param: baudrate	rate in bits/sec at which uart will send and receive data
+ * param: baudrate	data transfer rate in bits/sec for UART module
  *
  * return: void
  * 
@@ -49,7 +50,7 @@ uint8_t UARTRecvChar(void);
 /* ******************************************************************************
  * This function sends a byte of data through UART module
  *
- * param: c	the byte of data that needs to be sent
+ * param: c	byte of data that is to be sent
  *
  * return: void
  * 
@@ -60,17 +61,19 @@ uint8_t UARTRecvChar(void);
 void UARTSendChar(char c);
 
 
-/* ******************************************************************************
- * This function sends a byte of data through UART module
+/* *********************************************************************************
+ * This function sends a string of data through UART module
  *
- * param: c	the byte of data that needs to be sent
+ * param: s	pointer to the string/ char array of the data that is to be sent.
  *
  * return: void
  * 
- * brief: The functions sends a byte of data through uart module when an ongoing
- * transmission if any is completed.
+ * brief: The function send the string, pointed by the pointer argument through the
+ * UART module. The function keeps sending the next byte until null terminating char
+ * is reached. It is expected that the string to be sent is terminated
+ * with '\0' by the caller.
  *
- * *****************************************************************************/
+ * ********************************************************************************/
 void UARTSendString(char *s);
 
 

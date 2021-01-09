@@ -1,9 +1,11 @@
-/* Header file for application related code
+/* **************************************************************************
+ * Header file for application related code
  *
- * Engineer: 	Ameya Phadke
- * Date:	4th Dec 2020 
+ * Author:		Ameya Phadke
+ * Date creared:	4th Dec 2020 
+ * Last modified:	8th Jan 2021
  *
- * ________________________________________*/
+ * *************************************************************************/
 
 #ifndef _APP_H
 #define _APP_H
@@ -62,7 +64,7 @@ void LEDUpdateTask(void);
  * 
  * brief: This task controlles and updates the pwm output connected to led.
  * based on commands given from terminal it changes the brightness of led by
- * controlling the duty of pwm cycle. It can also render a fading animation on
+ * controlling the duty cycle of pwm. It can also render a fading animation on
  * the led based on user commands from terminal.
  *
  * ****************************************************************************/

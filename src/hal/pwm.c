@@ -3,8 +3,9 @@
  * use the pwm module present on tm4c129encpdt
  * This file uses TI's provided tm4c129encpdt.h header file
  *
- * Engineer:	Ameya Phadke
- * Date:	13th Dec 2020
+ * Author:			Ameya Phadke
+ * Date created:	13th Dec 2020
+ * Last modified:	8th Jan 2021
  *
  * ***********************************************************/
 
@@ -48,9 +49,7 @@ void PWMLedInit(uint32_t period, uint8_t duty){
 	GPIO_PORTF_AHB_AFSEL_R	|= (1U<<0);
 	GPIO_PORTF_AHB_PCTL_R	|= (0x06<<0);
 
-	/*
-	 * Init PWM 
-	 * */
+	/* Init PWM */
 
 	/* disable the pwm before setup*/
 	PWM0_0_CTL_R |= (0x0<<0);
@@ -76,7 +75,7 @@ void PWMLedInit(uint32_t period, uint8_t duty){
  *
  * return: void
  * 
- * brief: Updates teh compare register t update the duty cycle of the
+ * brief: Updates the compare register to update the duty cycle of the
  * pwm signal.
  * 
  * ********************************************************************/

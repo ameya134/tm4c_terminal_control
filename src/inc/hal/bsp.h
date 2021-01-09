@@ -33,7 +33,7 @@ void INIT_LED_2(void);
  * port F pin 4 as gpio output */
 void INIT_LED_3(void);
 /* Initialises the led connected to
- * port F pin 4 as gpio output */
+ * port F pin 0 as gpio output */
 void INIT_LED_4(void);
 
 

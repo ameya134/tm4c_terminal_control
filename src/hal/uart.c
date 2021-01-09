@@ -3,8 +3,9 @@
  * data using the UART 0. compatible with TI's tivaware microcontroller
  * header file
  *
- * Engineer: 	Ameya Phadke
- * Date:	4th Dec 2020
+ * Author:		Ameya Phadke
+ * Date created:	4th Dec 2020
+ * Last modified:	8th Jan 2021
  *
  * ***************************************************************************/
 
@@ -16,14 +17,14 @@
 
 
 
-/* ***************************************************************************
+/* *******************************************************************************
  * This function initializes the UART module
  *
- * param: baudrate	rate in bits/sec at which uart will send and receive data
+ * param: baudrate	data transfer rate in bits/sec for UART module
  *
  * return: void
  * 
- * brief: The following function initializes the all the necessary gpio and 
+ * brief: The following function initializes all the necessary gpio and 
  * UART module settings to use UART
  *
  * baud rate is calculated using following formula
@@ -33,7 +34,7 @@
  * where BRDI is the 16 bit integer part and BRDF is the
  * 6 bit fractional part
  *
- * **************************************************************************/
+ * *******************************************************************************/
 void UARTInit(uint32_t baudrate){
 
 	/* Enable the power to UART Module and appropriate GPIO port*/
@@ -95,7 +96,8 @@ void UARTInit(uint32_t baudrate){
  * **************************************************************************/
 uint8_t UARTRecvChar(void){
 
-	/* check if new data is available */
+	/* check if new data is available, 
+	 * otherwise return 0 */
 	if((UART0_FR_R & (1U<<6))){
 		return ((uint8_t) UART0_DR_R);
 	}
@@ -108,7 +110,7 @@ uint8_t UARTRecvChar(void){
 /* ******************************************************************************
  * This function sends a byte of data through UART module
  *
- * param: c	the byte of data that needs to be sent
+ * param: c	byte of data that is to be sent
  *
  * return: void
  * 

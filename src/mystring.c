@@ -1,8 +1,9 @@
 /******************************************************
  * This file implements some string related functions
  *
- * Engineer:	Ameya Phadke
- * Date:	16th Dec 2020
+ * Author:		Ameya Phadke
+ * Date created:	16th Dec 2020
+ * Last modified:	8th Jan 2021
  *
  * ****************************************************/
 
@@ -15,7 +16,7 @@
  *
  * param: num		number that is to be converted into string format
  *
- * param: restStr	pointer to string to which results are returned to.
+ * param: restStr	pointer to string where results are written to.
  *
  * return: void
  * 

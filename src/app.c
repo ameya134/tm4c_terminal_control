@@ -1,8 +1,9 @@
 /* ***************************************
  * MAIN APPLICATION PROGRAM RESIDES HERE 
  *
- * Engineer: 	Ameya Phadke
- * Date:	4th Dec 2020
+ * Author:		Ameya Phadke
+ * Date created:	4th Dec 2020
+ * Last modified:	8th Jan 2021
  *
  * ***************************************/
 
@@ -18,10 +19,12 @@
 
 /* variable used to control pwm fading on led 4 */
 volatile int pwm_fade = 0;
+volatile int8_t pwmDuty = 50;
+volatile uint8_t pwmDir = 1;
 
 /* variables to control blinking */
 volatile uint16_t LED1_PERIOD_MS = 200;
-volatile int blink_on = 0;
+volatile int blink_on = 1;
 volatile uint16_t countLED1=0;
 
 
@@ -124,29 +127,26 @@ void LEDUpdateTask(void){
  * 
  * brief: This task controlles and updates the pwm output connected to led.
  * based on commands given from terminal it changes the brightness of led by
- * controlling the duty of pwm cycle. It can also render a fading animation on
+ * controlling the duty cycle of pwm. It can also render a fading animation on
  * the led based on user commands from terminal.
  *
  * ****************************************************************************/
 void PWMUpdateTask(void){
 
-	static int8_t pwmDuty = 50;
-	static uint8_t pwmDir = 1;
 
 	/* function returns if fade is disabled.
 	 * fade can be enabled using the terminal command. */
-	if (pwm_fade == 0){
-		return;
-	}
-		
-	/* update pwm duty cycle */
-	if(pwmDir == 1){
-		pwmDuty++;
-	}else{
-		pwmDuty--;
-	}
-	if((pwmDuty == 99) || (pwmDuty == 0)){
-		pwmDir = ~pwmDir;
+	if (pwm_fade == 1){
+	
+		/* update pwm duty cycle */
+		if(pwmDir == 1){
+			pwmDuty++;
+		}else{
+			pwmDuty--;
+		}
+		if((pwmDuty == 99) || (pwmDuty == 0)){
+			pwmDir = ~pwmDir;
+		}
 	}
 
 	PWMLedDutyUpdate(pwmDuty);

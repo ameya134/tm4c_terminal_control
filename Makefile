@@ -37,7 +37,7 @@ $(TARGET).elf: $(OBJS)
 
 .PHONY: clean
 clean:
-	rm -f src/*.o $(TARGET).elf $(TARGET).map $(TARGET).s
+	rm -f src/*.o src/hal/*.o $(TARGET).elf $(TARGET).map $(TARGET).s
 
 .PHONY: load
 load:

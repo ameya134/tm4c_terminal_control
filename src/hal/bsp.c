@@ -1,10 +1,12 @@
 /* This is the led driver for ek-tm4c129exl launchpad
- * this driver works with tm4c129encpdt.h provided by TI*/
+ * this driver works with tm4c129encpdt.h provided by TI
+ * in tivaware. */
 
 #include "bsp.h"
 
-
-static uint8_t ledBits=0x00; // bitwise variable
+/* variable to monitor state of leds.
+ * can be used from other files by extern */
+static uint8_t ledBits=0x00;
 
 
 /* Initialises the led connected to
@@ -59,7 +61,7 @@ void INIT_LED_3(void)
 
 
 /* Initialises the led connected to
- * port F pin 4 as gpio output */
+ * port F pin 0 as gpio output */
 void INIT_LED_4(void)
 {
 	/* start clock to port F(5th port)*/
